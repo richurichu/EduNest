@@ -4,7 +4,8 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView,ListCreateAPIView
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -98,4 +99,110 @@ class CommentEditDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = EditDeleteSerializer
     lookup_field = 'id'
-  
+
+class QuestionListCreateView(ListCreateAPIView):
+    # permission_classes = [IsAuthenticated]
+    queryset = Discussion.objects.all()
+    
+    serializer_class = QuestionSerializer
+    parser_classes = [MultiPartParser, FormParser]
+
+    def perform_create(self, serializer):
+        content = self.request.data.get('content')
+        user_id = self.request.data.get('user')
+        image = self.request.data.get('image')
+        user = CustomUser.objects.get(pk=user_id)
+        
+        if 'image' in self.request.data:
+            image = self.request.data.get('image')
+            serializer.save(user=user, content=content, image=image)
+        else:
+            serializer.save(user=user, content=content)
+
+
+
+# class DiscussionRepliesViewSet(viewsets.ModelViewSet):
+#     queryset = Discussion_Comment.objects.all()
+#     serializer_class = DiscussionCommentSerializer
+
+
+class DiscussionRepliesViewSet(viewsets.ModelViewSet):
+    
+    queryset = Discussion_Comment.objects.all()
+    serializer_class = DiscussionCommentSerializer
+
+    def get_queryset(self):
+        Question_id = self.request.query_params.get('Question_id')
+        if Question_id:
+            return Discussion_Comment.objects.filter(question=Question_id)
+        else:
+           
+            return Discussion_Comment.objects.none()       
+
+
+class DiscussionResponseCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, Question_id):
+        user = request.user
+        text = request.data.get('text', '')
+        audio = request.data.get('audio')
+
+        try:
+            question = Discussion.objects.get(pk=Question_id)
+        except Discussion.DoesNotExist:
+            return Response("Question not found", status=status.HTTP_404_NOT_FOUND)
+
+        comment = Discussion_Comment(
+            question=question,
+            user=user,
+           
+        )
+
+        if audio:
+            comment.audio = audio
+        if text:
+            comment.text = text
+
+        comment.save()
+        serializer = DiscussionResponseCommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class DiscussionEditDeleteView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Discussion_Comment.objects.all()
+    serializer_class = DiscussionCommentEditDeleteSerializer
+    lookup_field = 'id'
+
+class DiscussionNestedReplyCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, Question_id):
+        user = request.user
+        text = request.data.get('text', '')
+        audio = request.data.get('audio')
+        id = request.data.get('parentid')
+
+        parent =Discussion_Comment.objects.get(pk=id)
+
+        try:
+            question = Discussion.objects.get(pk=Question_id)
+        except Discussion.DoesNotExist:
+            return Response("Question not found", status=status.HTTP_404_NOT_FOUND)
+
+        comment = Discussion_Comment(
+            question=question,
+            user=user,
+            parent_comment=parent,
+           
+        )
+
+        if audio:
+            comment.audio = audio
+        if text:
+            comment.text = text
+
+        comment.save()
+        serializer = DiscussionNestedCommentSerializer(comment)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

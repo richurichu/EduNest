@@ -16,6 +16,7 @@ from rest_framework.exceptions import PermissionDenied
 
 
 
+
 class UserRegistrationView(APIView):
 
     def post(self, request):
@@ -77,13 +78,6 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.exclude(role='TEACHER')
     serializer_class = CustomUserSerializer
  
-
-# class GetUserRoleView(generics.RetrieveAPIView):
-#     serializer_class = UserRoleSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def get_object(self):
-#         return self.request.user
 
 class GetUserRoleView(APIView):
     permission_classes = [IsAuthenticated]

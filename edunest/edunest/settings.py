@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'Courses',
     'Notes',
     'Comments',
+    'Testseries',
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',

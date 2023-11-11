@@ -151,6 +151,63 @@ class ChapterCreateView(CreateAPIView):
         serializer.save(course=course , is_free = is_free_chapter)
 
 
+class ChapterLikeToggle(APIView):
+    print('in the view -------------------------------------------------')
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request,chapter_id):
+        chapter = Chapter.objects.get(pk=chapter_id)
+        user = request.user 
+
+        try :
+            chapter_liked = ChapterLiked.objects.get(user=user,chapter=chapter)
+        except ChapterLiked.DoesNotExist:
+               ChapterLiked.objects.create(user= user , chapter = chapter,is_liked = True)
+               chapter.Likes_count += 1
+               chapter.save()
+               return Response({'success': 'Like status updated successfully'}, status=status.HTTP_200_OK)
+        
+        if chapter_liked.is_liked == False:
+            chapter.Likes_count += 1
+        else:
+             chapter.Likes_count -= 1
+        chapter.save()
+        print(chapter.Likes_count,'======================================================')
+        chapter_liked.is_liked = not chapter_liked.is_liked
+        chapter_liked.save()
+        likes_count = ChapterLiked.objects.filter(chapter__id=chapter_id, is_liked=True).count()
+
+        response_data = {
+            'is_liked': chapter_liked.is_liked,
+            'likes_count': likes_count,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+
+    def get(self, request,chapter_id):
+        chapter = Chapter.objects.get(pk=chapter_id)
+        user = request.user 
+
+        try :
+            chapter_liked = ChapterLiked.objects.get(user=user,chapter=chapter)
+        except ChapterLiked.DoesNotExist:
+            chapter_liked = ChapterLiked(is_liked=False)
+               
+        
+        likes_count = ChapterLiked.objects.filter(chapter__id=chapter_id, is_liked=True).count()
+        if likes_count == 0:
+           likes_count = 0
+
+
+        response_data = {
+            'is_liked': chapter_liked.is_liked,
+            'likes_count': likes_count,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+
 class ChaptersForCourses(RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
@@ -189,9 +246,9 @@ class ChaptersByCourse(APIView):
         user_id = self.request.user.id 
         print(user_id)
         print(course_id)
-        payments = Payment.objects.all()
-        for i in payments:
-            print(i)
+        # payments = Payment.objects.all()
+        # for i in payments:
+        #     print(i)
         user_has_purchased = Payment.objects.filter(course=course_id, user=user_id).exists()
 
         if not chapters.exists():

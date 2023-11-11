@@ -24,7 +24,8 @@ urlpatterns = [
     path('' ,include('authentification.urls')),
     path('courses-about/' ,include('Courses.urls')),
     path('notes-about/',include('Notes.urls')),
-    path('comments-about/',include('Comments.urls'))
+    path('comments-about/',include('Comments.urls')),
+    path('testseries/', include('Testseries.urls')),
 
 ]
 

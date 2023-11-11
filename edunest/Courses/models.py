@@ -44,10 +44,16 @@ class Chapter(models.Model):
     video = models.FileField(upload_to='chapter_videos/')
     notes = models.FileField(upload_to='chapter_notes/', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True) 
+    Likes_count = models.IntegerField(default=0)
     is_free = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
+
+class ChapterLiked(models.Model):
+    user = models.ForeignKey('authentification.CustomUser', on_delete=models.CASCADE)
+    chapter = models.ForeignKey(Chapter,on_delete=models.CASCADE)
+    is_liked = models.BooleanField(default=False)
     
 class Payment(models.Model):
     user = models.ForeignKey('authentification.CustomUser', on_delete=models.CASCADE)

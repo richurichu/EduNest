@@ -17,6 +17,9 @@ urlpatterns = [
      path('approve_application/<int:application_id>/', ApplicationApproval.as_view(), name='approve_application'),
      path('create-chapter/', ChapterCreateView.as_view(), name='create-chapter'),
      path('chapters/', ChapterListView.as_view(), name='chapter-list'),
+     path('toggleLike/<int:chapter_id>/', ChapterLikeToggle.as_view(), name='toggleLike'),
+
+
      
      path('courses/<int:course_id>/chapters/', ChaptersByCourse.as_view(), name='chapters-by-course'),
      path('handle_payment/', HandlePaymentView.as_view(), name='handle_payment'),
