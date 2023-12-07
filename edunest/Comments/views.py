@@ -4,8 +4,11 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import RetrieveUpdateDestroyAPIView,ListCreateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView,ListCreateAPIView,UpdateAPIView,DestroyAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
+ 
+
+
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -119,6 +122,29 @@ class QuestionListCreateView(ListCreateAPIView):
         else:
             serializer.save(user=user, content=content)
 
+
+class QuestionUpdateView(UpdateAPIView):
+   
+    queryset = Discussion.objects.all()
+    serializer_class = QuestionSerializer
+    parser_classes = [MultiPartParser, FormParser]
+
+    def perform_update(self, serializer):
+        content = self.request.data.get('content')
+        image = self.request.data.get('image')
+
+        if 'image' in self.request.data:
+            
+            serializer.save(content=content, image=image)
+        else:
+            
+            serializer.save(content=content)
+
+
+class QuestionDeleteView(DestroyAPIView):
+    queryset = Discussion.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = [IsAuthenticated]
 
 
 # class DiscussionRepliesViewSet(viewsets.ModelViewSet):

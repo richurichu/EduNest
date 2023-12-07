@@ -9,6 +9,7 @@ router.register(r'users', CustomUserViewSet, basename='users')
 
 urlpatterns = [
     path('users/', include((router.urls, 'app_name'))),
+    
     # path('CustomUserListView/',CustomUserListView.as_view()),
     path('UserRegistrationView/',UserRegistrationView.as_view()),
     path('check_username/', CheckUsernameView.as_view(), name='check_username'),
@@ -20,7 +21,12 @@ urlpatterns = [
 
     path('logout/', LogoutView.as_view(), name='logout'),
     path('get-user-role/', GetUserRoleView.as_view(), name='get-user-role'),
+    path('resend-otp/', ResendOtp.as_view(), name='resend-otp'),
     path('switch-role/', SwitchRoleView.as_view(), name='switch-role'),
+    path('profile-details/<int:user_id>/', GetProfileView.as_view(), name='profile-details'),
+    path('set-profile-image/<int:user_id>/', ProfileImage.as_view(), name='set-picture'),
+    
+    path('check-otp-verified/', Check_Otp.as_view(), name='check-confirmation'),
   
    
 ]

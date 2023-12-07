@@ -1,4 +1,5 @@
 from rest_framework  import serializers
+from Family.serializers import FamilySerializer
 from .models import *
  
 class CustomUserRegistrationSerializer(serializers.ModelSerializer):
@@ -17,9 +18,10 @@ class CustomUserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    family = FamilySerializer(read_only=True)
     class Meta:
         model = CustomUser
-        fields = ('username', 'email','role','id','profile_image' )
+        fields = ('username', 'email','role','id','profile_image','family','quiz_points' )
 
 
 

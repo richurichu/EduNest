@@ -19,6 +19,7 @@ from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('' ,include('authentification.urls')),
@@ -26,6 +27,10 @@ urlpatterns = [
     path('notes-about/',include('Notes.urls')),
     path('comments-about/',include('Comments.urls')),
     path('testseries/', include('Testseries.urls')),
+    path('families/', include('Family.urls')),
+    
+    
+    
 
 ]
 

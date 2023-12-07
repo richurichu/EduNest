@@ -13,6 +13,7 @@ from .models import CustomUser
 from .serializers import CustomUserSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import PermissionDenied
+from Family.models import Families
 
 
 
@@ -42,6 +43,30 @@ class UserRegistrationView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class ResendOtp(APIView):
+
+    def post(self, request):
+        username = request.data.get('username')
+        user = CustomUser.objects.get(username= username)
+
+        otp = ''.join(random.choices('0123456789', k=6))
+        user.otp = otp
+        user.otp_created_at = timezone.now()
+        user.save()
+        print(user.username)
+        print(user.email)
+
+        send_mail(
+                'Your OTP Code',
+                f'Your OTP code is: {otp}',
+                'from_email@example.com',  
+                [user.email],
+                fail_silently=False,
+            )
+        
+        return Response('Otp send successfuly')
+        
 class CheckUsernameView(APIView):
 
     def get(self, request):
@@ -77,7 +102,21 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 
     queryset = CustomUser.objects.exclude(role='TEACHER')
     serializer_class = CustomUserSerializer
- 
+
+
+class Check_Otp(APIView):
+    
+
+    def post(self, request):
+        username = request.data.get('username')
+        user = CustomUser.objects.filter(username = username).first()
+        
+        is_verified = user.is_verified
+        
+        response_data = {'is_verified': is_verified}
+        
+        return Response(response_data, status=status.HTTP_200_OK)
+
 
 class GetUserRoleView(APIView):
     permission_classes = [IsAuthenticated]
@@ -85,10 +124,26 @@ class GetUserRoleView(APIView):
     def get(self, request):
         user = request.user
         print(user.role,'============================================')
+
         if user.role == 'BAN':
             raise PermissionDenied("Admin has blocked you")
-        return Response({'role': user.role, 'temp_role': user.temp_role,'user_id': user.id})
+        
+        
+        return Response({'role': user.role, 'temp_role': user.temp_role,'user_id': user.id ,})
     
+
+    
+class GetProfileView(APIView):
+    
+    def get(self, request,user_id):
+       user = CustomUser.objects.get(id = user_id)
+    
+       serializer = CustomUserSerializer(user)
+        
+       return Response(serializer.data)
+    
+
+
 class SwitchRoleView(APIView):
         permission_classes = [IsAuthenticated] 
         def post(self, request):
@@ -121,6 +176,17 @@ class UpdateFacultyRoleView(APIView):
 
         return Response({"error": "Invalid role provided."}, status=status.HTTP_400_BAD_REQUEST)
 
+class ProfileImage(APIView):
+    
+
+    def post(self, request, user_id):
+        picture = request.data.get('pic')
+        user = CustomUser.objects.get(pk = user_id)
+        user.profile_image = picture
+        user.save()
+
+        return Response( status=status.HTTP_201_CREATED)
+    
 
 class LogoutView(APIView):
     permission_classes = [AllowAny]

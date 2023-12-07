@@ -230,6 +230,7 @@ class ChaptersForCourses(RetrieveAPIView):
         except Course.DoesNotExist:
             return Response({"error": "Course not found."}, status=400)
         
+        
 class ChapterEditDeleteView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Chapter.objects.all()
