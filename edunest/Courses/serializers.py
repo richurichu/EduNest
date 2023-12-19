@@ -84,6 +84,11 @@ class ChapterEditSerializer(serializers.ModelSerializer):
         model = Chapter
         fields = ['title', 'description']
 
+class ChapterNotesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = ['title', 'pk']
+
 
 class ChapterLikeToggle(serializers.ModelSerializer):
     user = CustomUserSerializer()

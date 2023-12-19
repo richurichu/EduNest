@@ -1,7 +1,7 @@
 from rest_framework  import serializers
 from Family.serializers import FamilySerializer
 from .models import *
- 
+from Courses.models import *
 class CustomUserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -21,7 +21,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     family = FamilySerializer(read_only=True)
     class Meta:
         model = CustomUser
-        fields = ('username', 'email','role','id','profile_image','family','quiz_points' )
+        fields = ('username', 'email','role','id','profile_image','family','quiz_points','temp_role' )
 
 
 
@@ -30,4 +30,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
 #         model = CustomUser
         
 #         fields = ('temp_role','role')
-
+class CourseSerializer(serializers.ModelSerializer):
+    total_amount_received = serializers.IntegerField() 
+    class Meta:
+        model = Course
+        fields = '__all__'

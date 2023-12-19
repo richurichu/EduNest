@@ -15,6 +15,10 @@ urlpatterns = [
     path('check_username/', CheckUsernameView.as_view(), name='check_username'),
     path('change-faculty-role/<int:user_id>/', UpdateFacultyRoleView.as_view(), name='update-Faculty-role'),
     path('VerifyOTPView/',VerifyOTPView.as_view()),
+    path('verify-ResendOTPView/',VerifyResendOTPView.as_view()),
+    path('Otp-ForgotPassword/',ResendOtpForgotPassword.as_view()),
+     path('Newpassword-changing/',ChangeNewPassword.as_view()),
+     path('admin-dashboard/',FetchAllDetailsDashboard.as_view()),
 
     path('token/', jwt_views.TokenObtainPairView.as_view(),  name ='token_obtain_pair'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(),  name ='token_refresh'),

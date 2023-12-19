@@ -10,6 +10,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.generics import ListAPIView
 from django.shortcuts import get_object_or_404
 
+
+
 class GetFamiliesAndCheckPayment(APIView):
     def get(self, request, user_id):
         families = Families.objects.all()
@@ -124,11 +126,6 @@ class LeaveFamily(APIView):
         
         return Response('Leaved succesfully')
         
-            
-
-    
-
-    
 class GetMessages(APIView):
     def get(self, request, room_id):
         messages = Message.objects.filter(family=room_id)

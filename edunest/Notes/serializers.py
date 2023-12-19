@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from  .models import *
-from Courses.serializers import ChapterSerializer
+from Courses.serializers import ChapterNotesSerializer
 
 class NoteSerializerAdd(serializers.ModelSerializer):
     print('raeched serializers==================================================================')
@@ -9,7 +9,7 @@ class NoteSerializerAdd(serializers.ModelSerializer):
         fields = ['id', 'chapter', 'timestamp', 'content', 'created_at']
 
 class NoteSerializer(serializers.ModelSerializer):
-    chapter_details = ChapterSerializer(source='chapter', read_only=True)
+    chapter = ChapterNotesSerializer( read_only=True)
 
     class Meta:
         model = Note

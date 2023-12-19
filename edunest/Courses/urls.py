@@ -19,6 +19,8 @@ urlpatterns = [
      path('chapters/', ChapterListView.as_view(), name='chapter-list'),
      path('toggleLike/<int:chapter_id>/', ChapterLikeToggle.as_view(), name='toggleLike'),
 
+     path('purchased-courses/<int:user_id>/', PurchasedCoursesView.as_view(), name='purchased-course'),
+
 
      
      path('courses/<int:course_id>/chapters/', ChaptersByCourse.as_view(), name='chapters-by-course'),

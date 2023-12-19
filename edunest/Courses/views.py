@@ -23,7 +23,16 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all().order_by('-updated_at')
     serializer_class = CourseSerializer
 
+class PurchasedCoursesView(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(CustomUser, id=user_id)
+        purchased_courses = user.payment_set.values('course').distinct()
+        courses = Course.objects.filter(id__in=purchased_courses)
 
+        serializer = CourseSerializer(courses, many=True)
+        return Response(serializer.data)
+    
+    
 class Course_advertis(viewsets.ModelViewSet):
     queryset = Course_advertise.objects.filter(is_vacant=True).order_by('-updated_at')
     serializer_class = CourseadvSerializer

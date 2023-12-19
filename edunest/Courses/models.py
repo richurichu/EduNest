@@ -11,6 +11,7 @@ class Course(models.Model):
     is_blocked = models.BooleanField(default=False)
     teacher = models.ForeignKey('authentification.CustomUser', on_delete=models.CASCADE, null=True,blank=True) 
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
     
@@ -49,6 +50,7 @@ class Chapter(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class ChapterLiked(models.Model):
     user = models.ForeignKey('authentification.CustomUser', on_delete=models.CASCADE)
