@@ -16,12 +16,8 @@ class NoteListCreateView(generics.ListCreateAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializerAdd
     
-
-   
-
     def perform_create(self, serializer):
         
-        print(self.request.data)
         serializer.save(user=self.request.user)
 
 
@@ -45,6 +41,7 @@ class AvailableNotesDetail(APIView):
         notes = Note.objects.filter(chapter = chapter , user = user)
         serializer = NoteSerializer(notes,many=True)
         return Response(serializer.data)
+    
     
 class NoteEditDeleteView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]

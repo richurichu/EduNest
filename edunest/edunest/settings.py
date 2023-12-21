@@ -172,7 +172,17 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
+# MEDIA_URL = 'https://edunestmedia.s3.amazonaws.com/'
+MEDIA_URL = 'https://edunestmedia.s3.ap-south-1.amazonaws.com/'
+
+
+AWS_ACCESS_KEY_ID = 'AKIAWL2YQVU46ZW4TRMN'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'edunestmedia'
+AWS_S3_REGION_NAME = 'ap-south-1'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

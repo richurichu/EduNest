@@ -88,16 +88,12 @@ class ApplicationApproval(APIView):
 
     def post(self, request, application_id):
         application = get_object_or_404(applications, id=application_id)
-        print(application)
-        print(application.course_id.name)
-        print(application.user_id.username)
-
+       
         
         # Check if the user is already a teacher by checking their mainrole
         if application.user_id.role == 'TEACHER':
             return Response({"message": "This user is already a teacher for another course."}, status=status.HTTP_400_BAD_REQUEST)
-        print('reached11')
-        print(application.course_id.is_vacant)
+        
         # Check if the course is already filled
         if not application.course_id.is_vacant:
             return Response({"message": "This course already has a teacher."}, status=status.HTTP_400_BAD_REQUEST)
@@ -112,7 +108,7 @@ class ApplicationApproval(APIView):
         new_course.save()
         application.approved = True
         application.save()
-        print(application.approved,'----------------------------')
+       
         application.course_id.is_vacant = False
         application.course_id.save()
 
@@ -127,9 +123,7 @@ class ChapterListView(ListAPIView):
     serializer_class = ChapterViewSerializer
 
     def get_queryset(self):
-        print(self.request.user.username,'----------------------------------------------------------')
-        print("User authenticated:", self.request.user.is_authenticated)
-        print("User:", self.request.user)
+       
         try:
             course = Course.objects.get(teacher=self.request.user)
            
@@ -161,7 +155,7 @@ class ChapterCreateView(CreateAPIView):
 
 
 class ChapterLikeToggle(APIView):
-    print('in the view -------------------------------------------------')
+   
     permission_classes = [IsAuthenticated]
 
     def post(self, request,chapter_id):
@@ -181,7 +175,7 @@ class ChapterLikeToggle(APIView):
         else:
              chapter.Likes_count -= 1
         chapter.save()
-        print(chapter.Likes_count,'======================================================')
+       
         chapter_liked.is_liked = not chapter_liked.is_liked
         chapter_liked.save()
         likes_count = ChapterLiked.objects.filter(chapter__id=chapter_id, is_liked=True).count()
@@ -224,11 +218,11 @@ class ChaptersForCourses(RetrieveAPIView):
        
         try:
             application_instance = applications.objects.get(id=application_id)
-            print(application_instance)
+           
             course_advertise_instance = application_instance.course_id
-            print(course_advertise_instance)
+           
             course_instance = Course.objects.get(name=course_advertise_instance.name)
-            print(course_instance)
+           
             chapters = Chapter.objects.filter(course=course_instance)
             
             # Serialize the chapters
@@ -254,16 +248,12 @@ class ChaptersByCourse(APIView):
 
         chapters = Chapter.objects.filter(course=course_id).order_by('created')
         user_id = self.request.user.id 
-        print(user_id)
-        print(course_id)
-        # payments = Payment.objects.all()
-        # for i in payments:
-        #     print(i)
+        
         user_has_purchased = Payment.objects.filter(course=course_id, user=user_id).exists()
 
         if not chapters.exists():
             return Response({"detail": "No chapters found for this course."}, status=status.HTTP_404_NOT_FOUND)
-        print('ppppppppppppppppppppppppppppppppppppppppppp',user_has_purchased)
+        
        
 
         serializer = ChapterViewSerializer(chapters, many=True)
@@ -280,13 +270,13 @@ class HandlePaymentView(APIView):
 
     def post(self, request, *args, **kwargs):
         order_id = request.data.get('orderId')  
-        print(self.request.data)
+       
        
         course_id = request.data.get('courseId')
 
         if order_id and course_id:
             course = Course.objects.get(id=course_id)
-            print(request.user)
+           
             Payment.objects.create(
                     user=self.request.user,
                     course=course,

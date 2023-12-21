@@ -48,7 +48,7 @@ class CommentCreateView(APIView):
         if request.data.get('parentid'):
              
              id = request.data.get('parentid')
-             print(id,'===================================================')
+            
              parent = Comment.objects.get(pk=id)
 
              comment = Comment.objects.create(
@@ -83,7 +83,7 @@ class ReplyCreateView(APIView):
         chapter = Chapter.objects.get(pk=chapter_id)
         user = request.user  # This is the authenticated user
         
-        print(id,'===================================================')
+       
         parent = Comment.objects.get(pk=id)
 
         comment = Comment.objects.create(
@@ -194,11 +194,15 @@ class DiscussionResponseCreateView(APIView):
         serializer = DiscussionResponseCommentSerializer(comment)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+
+    
 class DiscussionEditDeleteView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Discussion_Comment.objects.all()
     serializer_class = DiscussionCommentEditDeleteSerializer
     lookup_field = 'id'
+
+
 
 class DiscussionNestedReplyCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -232,3 +236,4 @@ class DiscussionNestedReplyCreateView(APIView):
         serializer = DiscussionNestedCommentSerializer(comment)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    

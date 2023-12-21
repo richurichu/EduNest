@@ -29,12 +29,8 @@ class AdminQuizView(APIView):
         application_id = self.request.query_params.get('application_id')
         application = get_object_or_404(applications, pk=application_id)
         user_id = get_object_or_404(CustomUser, pk=application.user_id.id)
-        print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',user_id)
-
         testseries = TestSeries.objects.filter(faculty=user_id,is_published=True).annotate(question_count=Count('question'))
         serializers = FacultyTestSeriesSerializer(testseries, many= True)
-
-        
         return Response(serializers.data)
     
 
@@ -76,7 +72,7 @@ class FacultyQuizCreate(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self,request,):
-        print(request.data)
+       
         quiz_id = request.data['quiz_id']
         question = request.data['question']
         options_data = request.data['options']
@@ -115,7 +111,7 @@ class FacultyQuizUpdate(APIView):
    
     def put(self, request):
         question_data = request.data
-        print('pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp',question_data)
+        
         question_id = request.data['question_id']
         question_obj = get_object_or_404(Question, pk=question_id)
 
@@ -125,9 +121,7 @@ class FacultyQuizUpdate(APIView):
             question_obj.save()
        
         for option_data in question_data.get('options', []):
-            print('---------------------------------------------------------------------------',option_data)
            
-    
             option_id = option_data.get('id')
             option_text = option_data['text']
             is_correct = option_data['isCorrect']
@@ -137,17 +131,15 @@ class FacultyQuizUpdate(APIView):
             option_obj.is_correct = is_correct
             option_obj.save()
            
-
         return Response({'message': 'Question and options updated successfully'})
 
 class TestseriesDetailAPI(APIView):
-    print('reached testseries_______________________________________________')
+   
     def get(self,request,testseries_id,format=None):
        
             
         # test_series = TestSeries.objects.prefetch_related('question_set__option_set').get(id=testseries_id)
         test_series = TestSeries.objects.get(id=testseries_id)
-        print(test_series)
         
         questions = test_series.question_set.all()
         
@@ -163,13 +155,13 @@ class TestseriesDetailAPI(APIView):
         return Response(questions_dict)
     
 class FacultyTestseriesDetailAPI(APIView):
-    print('reached testseries_______________________________________________')
+    
     def get(self,request,testseries_id,format=None):
        
             
        
         test_series = TestSeries.objects.get(id=testseries_id)
-        print(test_series)
+        
         
         questions = test_series.question_set.all()
         
@@ -252,6 +244,8 @@ class CalculateMarksAPIView(APIView):
 
 
         return Response({'total_marks': rounded_total_marks , 'correct_count':correct_count , 'unattempted_count':unattempted_count ,'incorrect_count':incorrect_count ,'testseries_id':testseries_id})
+
+
 
 class QuizResponseListView(ListAPIView):
     serializer_class = QuizResponseSerializer

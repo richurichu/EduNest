@@ -43,7 +43,7 @@ class FamilyCreateView(ListCreateAPIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def perform_create(self, serializer):
-        print('reached =============================================+++++++++++++++++++++++++++++++++++++')
+       
         name = self.request.data.get('name')
         instruction = self.request.data.get('instruction')
         user_id = self.request.data.get('user')
@@ -119,11 +119,9 @@ class LeaveFamily(APIView):
             user.save()
             return Response('Leaved succesfully')
         
-        
         family = Families.objects.get(id= room_id)
         family.owner = None
         family.save()
-        
         return Response('Leaved succesfully')
         
 class GetMessages(APIView):

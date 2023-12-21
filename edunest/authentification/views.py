@@ -32,9 +32,7 @@ class UserRegistrationView(APIView):
             user.otp = otp
             user.otp_created_at = timezone.now()
             user.save()
-            print(user.username)
-            print(user.email)
-
+           
             send_mail(
                 'Your OTP Code',
                 f'Your OTP code is: {otp}',
@@ -54,13 +52,11 @@ class ResendOtp(APIView):
         user = CustomUser.objects.get(username= username)
         
         otp = ''.join(random.choices('0123456789', k=6))
-        print(otp,'//////////////////////////////////////////////////')
+       
         user.otp = otp
         user.otp_created_at = timezone.now()
         user.save()
-        print(user.otp,'99999999999999999999/////////////////////////////')
-        print(user.username)
-        print(user.email)
+
 
         send_mail(
                 'Your OTP Code',
@@ -81,13 +77,11 @@ class ResendOtpForgotPassword(APIView):
             return Response({"error": "No user found in that username"}, status=status.HTTP_400_BAD_REQUEST)
         
         otp = ''.join(random.choices('0123456789', k=6))
-        print(otp,'//////////////////////////////////////////////////')
+        
         user.otp = otp
         user.otp_created_at = timezone.now()
         user.save()
-        print(user.otp,'99999999999999999999/////////////////////////////')
-        print(user.username)
-        print(user.email)
+        
 
         send_mail(
                 'Your OTP Code',
@@ -161,10 +155,10 @@ class ChangeNewPassword(APIView):
         username = request.data.get('username')
         Newpassword = request.data.get('Newpassword')
        
-        print(username,'0-0000000000000000000000000000000000000')
+       
         
         user = CustomUser.objects.filter(username=username).first()
-        print(user,'000000000000000000000000000000000000000000')
+        
         if not user:
             return Response({"detail": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -198,7 +192,7 @@ class GetUserRoleView(APIView):
 
     def get(self, request):
         user = request.user
-        print(user.role,'============================================')
+        
        
         if user.role == 'BAN':
             raise PermissionDenied("Admin has blocked you")
@@ -254,6 +248,7 @@ class UpdateFacultyRoleView(APIView):
         return Response({"error": "Invalid role provided."}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileImage(APIView):
+    permission_classes = [IsAuthenticated]
     
 
     def post(self, request, user_id):
@@ -284,8 +279,6 @@ class FetchAllDetailsDashboard(APIView):
             'courses_with_total_amount':serializer.data
         }
 
-        
-           
         return Response(data)
         
 
@@ -293,14 +286,10 @@ class LogoutView(APIView):
     permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
         
-        print('reached ')
+        
         try:
             refresh_token = request.data["refresh_token"]
-            print(refresh_token,'reached ')
-        #     token = RefreshToken(refresh_token)
-        #     print(token,'reached ')
-        #     token.blacklist()
-
+           
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)            
