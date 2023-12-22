@@ -150,6 +150,8 @@ SIMPLE_JWT = {
      'BLACKLIST_AFTER_ROTATION': True
 }
 
+CSRF_TRUSTED_ORIGINS = ['http://edunestonline.site', 'https://edunestonline.site']
+
 
 PAYPAL_MODE = 'sandbox'  # or 'live' for production
 PAYPAL_CLIENT_ID = 'AbCASLvwWw6V1PZsqomXD4svWf3mQNYlnn8R_CLlfOy8XjqLef6q4btUj99KkXRnv7bh3bHiVH4Shblj'
