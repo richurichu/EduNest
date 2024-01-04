@@ -28,7 +28,7 @@ class EditDeleteSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
-    print('raeched discussion serilizer ')
+   
     
     image = serializers.ImageField(required=False)
     class Meta:

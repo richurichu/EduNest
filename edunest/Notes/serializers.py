@@ -3,7 +3,7 @@ from  .models import *
 from Courses.serializers import ChapterNotesSerializer
 
 class NoteSerializerAdd(serializers.ModelSerializer):
-    print('raeched serializers==================================================================')
+    
     class Meta:
         model = Note
         fields = ['id', 'chapter', 'timestamp', 'content', 'created_at']

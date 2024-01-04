@@ -22,7 +22,7 @@ class MessagesSerializer(serializers.ModelSerializer):
 
 class FamilyCreateSerializer(serializers.ModelSerializer):
     owner = CustomUserSerializer(read_only=True)
-    print('raeched discussion serilizer ')
+   
     
     family_image = serializers.ImageField(required=False)
     class Meta:
