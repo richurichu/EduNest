@@ -128,5 +128,24 @@ class GetMessages(APIView):
     def get(self, request, room_id):
         messages = Message.objects.filter(family=room_id)
         serializer = MessagesSerializer(messages, many=True)
-        
+
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class Chatmessages(APIView):
+    
+    
+    def post(self,request,):
+       
+        text = request.data['text']
+        sender = request.data['sender']
+        family_id = request.data['room_id']
+
+        if family_id:
+            family = Families.objects.get(pk=family_id)
+            Message.objects.create(
+                family=family,
+                sender=sender,
+                text=text
+            )
+
+        return Response({'message': 'mesg  created successfully '})
