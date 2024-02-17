@@ -200,7 +200,7 @@ class GetUserRoleView(APIView):
         serializer = CustomUserSerializer(user)
         
         return Response(serializer.data)
-        return Response({'role': user.role, 'temp_role': user.temp_role,'user_id': user.id })
+        
     
 
     
@@ -217,6 +217,7 @@ class GetProfileView(APIView):
 
 class SwitchRoleView(APIView):
         permission_classes = [IsAuthenticated] 
+        
         def post(self, request):
                 user = request.user
 

@@ -10,6 +10,8 @@ urlpatterns = [
     path('join-family/<int:user_id>/<int:fam_Id>/', JoinFamilyMember.as_view(), name='join_members'),
     path('block-members/<int:Id>/', BanFamilyMember.as_view(), name='block_members'),
     path('leave-family/<int:user_id>/<int:room_id>/', LeaveFamily.as_view(), name='leave_family'),
+    path('Owner-leave-family/<int:user_id>/<int:toBeOwnerId>/<int:room_id>/', AdminLeaveFamily.as_view(), name='admin_leave_family'),
+    path('delete-family/<int:room_id>/', DeleteFamily.as_view(), name='delete_family'),
 
     path('create-messages/', Chatmessages.as_view(), name='chat-messages'),
 ]

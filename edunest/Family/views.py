@@ -14,7 +14,7 @@ from django.shortcuts import get_object_or_404
 
 class GetFamiliesAndCheckPayment(APIView):
     def get(self, request, user_id):
-        families = Families.objects.all()
+        families = Families.objects.all().order_by('-created_on')
         user = CustomUser.objects.get(pk=user_id)
         serializer = FamilySerializer(families, many=True)
         
@@ -62,26 +62,32 @@ class FamilyCreateView(ListCreateAPIView):
                 serializer.save(owner=user, name=name ,instruction=instruction)
 
 class FamilyListView(APIView):
-    
 
     def get(self , request ,user_id):
        
 
         user = CustomUser.objects.get(pk=user_id)
         if user.family :
+          
             fam_name = user.family.name
             fam_id = user.family.pk
-            
-            return Response({'fam_name':fam_name , 'fam_id': fam_id})
+            owner_id = user.pk
+          
+            members_count = CustomUser.objects.filter(family = user.family).count()
+
+            return Response({'fam_name':fam_name , 'fam_id': fam_id ,'members_count':members_count, 'owner_id': owner_id})
         else:
             fam = Families.objects.get(owner = user)
+            members_count = CustomUser.objects.filter(family = fam).count()
             fam_name = fam.name
             fam_id = fam.pk
-            return Response({'fam_name':fam_name , 'fam_id': fam_id})
+            owner_id = user.pk
+            return Response({'fam_name':fam_name , 'fam_id': fam_id ,'members_count':members_count , 'owner_id':owner_id})
+        
+
             
 class MembersListView(APIView):
     
-
     def get(self , request ,room_id):
        
         fam = Families.objects.get(pk = room_id)
@@ -108,6 +114,14 @@ class JoinFamilyMember(APIView):
         user.save()
         return Response('Joined succesfully')
     
+class DeleteFamily(APIView):
+
+    def post(self , request , room_id):
+       
+        family = Families.objects.get(id = room_id)
+        family.delete()
+        return Response('Family deleted succesfully')
+    
 
 class LeaveFamily(APIView):
 
@@ -123,6 +137,28 @@ class LeaveFamily(APIView):
         family.owner = None
         family.save()
         return Response('Leaved succesfully')
+    
+class AdminLeaveFamily(APIView):
+
+    def post(self , request , user_id, toBeOwnerId, room_id):
+       
+        user = CustomUser.objects.get(id = user_id)
+        TobeOwner = CustomUser.objects.get(id = toBeOwnerId)
+
+
+        # if user.family:
+        #     user.family = None
+        #     user.save()
+        
+        family = Families.objects.get(id= room_id)
+        TobeOwner.family = None
+        family.owner = TobeOwner
+        user.family = None
+       
+        TobeOwner.save()
+        family.save()
+        user.save()
+        return Response('Owner removed  succesfully and New admin is appointed ')
         
 class GetMessages(APIView):
     def get(self, request, room_id):

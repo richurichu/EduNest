@@ -105,7 +105,7 @@ class CommentEditDeleteView(RetrieveUpdateDestroyAPIView):
 
 class QuestionListCreateView(ListCreateAPIView):
     # permission_classes = [IsAuthenticated]
-    queryset = Discussion.objects.all()
+    queryset = Discussion.objects.all().order_by('-created_at')
     
     serializer_class = QuestionSerializer
     parser_classes = [MultiPartParser, FormParser]
@@ -160,7 +160,7 @@ class DiscussionRepliesViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         Question_id = self.request.query_params.get('Question_id')
         if Question_id:
-            return Discussion_Comment.objects.filter(question=Question_id)
+            return Discussion_Comment.objects.filter(question=Question_id).order_by('-created_at')
         else:
            
             return Discussion_Comment.objects.none()       
