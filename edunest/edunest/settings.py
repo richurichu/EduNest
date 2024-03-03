@@ -188,8 +188,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'plantcompany1996@gmail.com'  # Replace with your Gmail address
-EMAIL_HOST_PASSWORD = 'rdchmhmhhwztxqlc'  # Replace with your Gmail password or app password
+EMAIL_HOST_USER = 'edunest74@gmail.com'  # Replace with your Gmail address
+EMAIL_HOST_PASSWORD = 'gfqa mnhm uzyg grwz'  # Replace with your Gmail password or app password
 EMAIL_USE_TLS = True
 
 # Default primary key field type
