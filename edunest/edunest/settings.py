@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -178,20 +179,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = 'https://edunestmedia.s3.ap-south-1.amazonaws.com/'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024 
 
-AWS_ACCESS_KEY_ID = 'AKIAWL2YQVU46ZW4TRMN'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'edunestmedia'
-AWS_S3_REGION_NAME = 'ap-south-1'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')
+DEFAULT_FILE_STORAGE = config('DEFAULT_FILE_STORAGE')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'edunest74@gmail.com'  # Replace with your Gmail address
-EMAIL_HOST_PASSWORD = 'gfqa mnhm uzyg grwz'  # Replace with your Gmail password or app password
-EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
+EMAIL_USE_TLS = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
