@@ -26,6 +26,7 @@ class TextRoomConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         # Receive message from WebSocket
+        print('message reached  ------------------------------------------------------ ')
         text_data_json = json.loads(text_data)
         text = text_data_json['text']
         sender = text_data_json['sender']
