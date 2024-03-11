@@ -111,7 +111,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Edunest',
-        'USER': 'postgress',
+        'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '5432',
@@ -154,11 +154,13 @@ CSRF_TRUSTED_ORIGINS = ['http://edunestonline.site', 'https://edunestonline.site
 
 
 PAYPAL_MODE = 'sandbox'  # or 'live' for production
-PAYPAL_CLIENT_ID = 'AbCASLvwWw6V1PZsqomXD4svWf3mQNYlnn8R_CLlfOy8XjqLef6q4btUj99KkXRnv7bh3bHiVH4Shblj'
-PAYPAL_SECRET = 'EFDvGBADnswB9Fl0gd6LuSAA9sOLKcBzo-RRbCCvTS2lQKqIGm--aFpaltdcsyJzFBiMN6vLYvHmgmje'
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+PAYPAL_SECRET = config('PAYPAL_SECRET')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
+
+
 
 LANGUAGE_CODE = 'en-us'
 
@@ -178,6 +180,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # MEDIA_URL = 'https://edunestmedia.s3.amazonaws.com/'
 MEDIA_URL = 'https://edunestmedia.s3.ap-south-1.amazonaws.com/'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024 
+
+
+
 
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
