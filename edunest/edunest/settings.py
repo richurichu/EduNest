@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-d9kz1xxr(rc0^asx1di1rmv^!$eerir%7slenr8xzbtki)#w#g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.edunestonline.site','edunestonline.site','0.0.0.0','127.0.0.1','16.171.139.108','13.49.125.129', '13.49.125.129:8000','localhost']
+ALLOWED_HOSTS = ['www.edunestonline.site','edunestonline.site','0.0.0.0','127.0.0.1','16.170.210.19', 'localhost']
 
 AUTH_USER_MODEL = 'authentification.CustomUser'
 # Application definition
