@@ -150,7 +150,7 @@ SIMPLE_JWT = {
      'BLACKLIST_AFTER_ROTATION': True
 }
 
-CSRF_TRUSTED_ORIGINS = ['http://edunestonline.site', 'https://edunestonline.site']
+CSRF_TRUSTED_ORIGINS = ['http://edunestonline.site', 'https://edunestonline.site','http://16.170.210.19']
 
 
 PAYPAL_MODE = 'sandbox'  # or 'live' for production
